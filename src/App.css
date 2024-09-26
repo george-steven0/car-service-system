@@ -1,0 +1,78 @@
+/* *{
+    color: #333;
+} */
+
+@media print {
+    html,body{
+        width: auto !important;
+        height: auto !important;
+        padding: 0px;
+    }
+    .view-bill{
+        padding: 8px 0px !important;
+    }
+    .printIcon,::-webkit-scrollbar,.prev-icon{
+        display: none;
+    }
+}
+.bill-item-container::-webkit-scrollbar{
+    width: 5px;
+}
+.bill-item-container::-webkit-scrollbar-track{
+    background-color: #d0d0d0;
+    border-radius: 20px;
+}
+
+.bill-item-container::-webkit-scrollbar-thumb{
+    background-color: #3399FF;
+    border-radius: 20px;
+}
+.css-ja5taz-MuiTooltip-tooltip{
+    text-transform: capitalize;
+}
+
+/* Navbar */
+.navbar-wrapper ul li .active{
+    background-color: #3399FF;
+}
+.navbar-wrapper ul li .active span,.navbar-wrapper ul li .active svg{
+    color: white;
+}
+/* .apexcharts-tooltip.apexcharts-theme-dark{
+    background-color: #3399FF !important;
+    color: wheat !important;
+} */
+
+/* custom class added in chart tooltip theme */
+/* .apexcharts-tooltip.apexcharts-theme-info{ 
+    background-color: red;
+} */
+/* Navbar */
+
+.addClientCarForm::-webkit-scrollbar{
+    width: 5px;
+}
+
+.addClientCarForm::-webkit-scrollbar-track{
+    background-color: #c5c5c5;
+    border-radius: 6px;
+}
+
+.addClientCarForm::-webkit-scrollbar-thumb{
+    background-color: #6d6d6d;
+    border-radius: 6px;
+}
+
+.addCarTypesCont::-webkit-scrollbar{
+    width: 5px;
+}
+
+.addCarTypesCont::-webkit-scrollbar-track{
+    background-color: #c5c5c5;
+    border-radius: 6px;
+}
+
+.addCarTypesCont::-webkit-scrollbar-thumb{
+    background-color: #6d6d6d;
+    border-radius: 6px;
+}

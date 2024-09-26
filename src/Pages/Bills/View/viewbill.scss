@@ -1,0 +1,13 @@
+@media print {
+    // .view-bill,html,body{
+    //     width: max-content !important;
+    //     height: max-content !important;
+    //     padding: 0px;
+    // }
+    .view-bill{
+        padding: 8px 0px !important;
+    }
+    .printIcon,::-webkit-scrollbar,.prev-icon{
+        display: none;
+    }
+}
