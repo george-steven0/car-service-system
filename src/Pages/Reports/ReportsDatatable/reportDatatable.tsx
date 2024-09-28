@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DataTable, { TableColumn, TableStyles } from "react-data-table-component";
+import DataTable, { TableColumn } from "react-data-table-component";
 import { billTableData } from "../../../Components/Types/types";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../../Components/Redux/TsHooks";
@@ -58,9 +58,9 @@ const ReportsDatatable = () => {
     const navigate = useNavigate()
     const [page,setpage] = useState<number>(1)
     const [size,setsize] = useState<number>(10)
-    const [searchValue,setsearchValue] = useState<string>('')
+    const [searchValue,] = useState<string>('')
     const dispatch = useAppDispatch()
-    const [paginated,setpaginated] = useState<number>(1)
+    const [paginated,] = useState<number>(1)
 
     const {currentPage} = useAppSelector((state) => state?.resetPagination);
     const {toggle} = useAppSelector((state) => state?.resetPagination);

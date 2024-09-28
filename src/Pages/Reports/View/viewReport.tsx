@@ -12,12 +12,12 @@ import { MdLocalPrintshop } from "react-icons/md";
 import Footer from "../../../Components/Layout/footer";
 
 const ViewReport = () => {
-    const {register,control,handleSubmit,formState,setValue,watch,getValues,unregister} = useForm<reportData>({
+    const {register,control,formState,setValue} = useForm<reportData>({
     })
     
     const {errors} = formState
 
-    const [isPrint,setisPrint] = useState(false)
+    const [_,setisPrint] = useState(false)
 
     const navigate = useNavigate()
 

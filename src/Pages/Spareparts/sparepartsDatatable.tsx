@@ -115,7 +115,7 @@ type sparePartProps = {
 const SparepartsDatatable = ({type,data,searchValue,t,lang}:sparePartProps) => {
     const [page,setpage] = useState<number>(1)
     const [size,setsize] = useState<number>(10)
-    const [paginated,setpaginated] = useState<number>(1)
+    const [paginated,_] = useState<number>(1)
     const dispatch = useAppDispatch()
 
     const {currentPage} = useAppSelector((state) => state?.resetPagination);

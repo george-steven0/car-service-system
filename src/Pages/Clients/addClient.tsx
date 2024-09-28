@@ -44,7 +44,7 @@ const AddClientModal = ({open,close,t,lang}:ModalType) => {
             }],
         },
     })
-    const {register,control,handleSubmit,formState,setValue,getValues,reset} = form
+    const {register,control,handleSubmit,formState,setValue,reset} = form
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -163,7 +163,7 @@ const AddClientModal = ({open,close,t,lang}:ModalType) => {
                             </div>
 
                             <section className="addClientCarForm  px-3 max-h-[350px] overflow-hidden overflow-y-auto col-span-2 grid grid-cols-1 md:grid-cols-3 gap-5 [&>div>label]:block [&>div>label]:text-[#333] [&>div>label]:font-semibold [&>div>label]:mb-1 [&>div>input]:w-full [&>div>input]:p-3 [&>div>input]:bg-mainLightBlue [&>div>input]:rounded-md [&>div>input]:outline-none [&>div>input]:shadow-sm">
-                                {fields?.map( (field,index)=>(
+                                {fields?.map( (_,index)=>(
                                     <>
                                         <div className="text-blue-500 col-span-3 m-0 flex items-center justify-between">
                                             <span>{t('common.car')} #  {index+1}</span>
@@ -229,7 +229,7 @@ const AddClientModal = ({open,close,t,lang}:ModalType) => {
                                                             />
                                                         )}
                                                         {...field}
-                                                        onChange={(event, data) => {
+                                                        onChange={(_, data) => {
                                                             field.onChange(data)
                                                             if(data){
                                                                 setValue(`cars.${index}.brand_id`,data?.id || '')

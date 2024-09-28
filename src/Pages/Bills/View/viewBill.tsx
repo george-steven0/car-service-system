@@ -14,11 +14,11 @@ import React, { useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
 import Footer from "../../../Components/Layout/footer";
 
-const ViewBill = React.forwardRef((props, ref) => {
+const ViewBill = React.forwardRef(() => {
     const [isPrint,setisPrint] = useState(false)
     // console.log(location?.state?.data);
     
-    const {register,control,handleSubmit,formState,setValue,watch,getValues,unregister} = useForm<BillFormData>({
+    const {register,control,formState,setValue,watch,getValues,unregister} = useForm<BillFormData>({
         // defaultValues: {
         //     parts: [
         //         { name: "part name", code: "code",price:20 },

@@ -3,7 +3,7 @@ import { useState } from "react";
 import SearchInput from "../../Components/Common/SearchInput/searchInput";
 import CarsTable from "./carsTable";
 import AddCarModal from "./Modals/addCar";
-import { useAppDispatch, useAppSelector } from "../../Components/Redux/TsHooks";
+import { useAppSelector } from "../../Components/Redux/TsHooks";
 import { getAllCars } from "../../Components/Redux/Slices/Cars/carSlice";
 import Overlay from "../../Components/Common/Overlay/overlay";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,6 @@ const Cars = () => {
     const [openModal, setopenModal] = useState(false)
     const handelModalOpen = ()=>setopenModal(true)
     const handelModalClose = ()=>setopenModal(false)
-    const dispatch = useAppDispatch()
 
     const cars = useAppSelector( (state)=>state?.cars )
     const {t} = useTranslation()

@@ -14,7 +14,7 @@ type radioType = {
     }
 
 }
-const RadioComponent:React.FC<radioType> = ({item,register}) => {
+const RadioComponent:React.FC<radioType> = ({item}) => {
     const [value, setValue] = useState<string>('');
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

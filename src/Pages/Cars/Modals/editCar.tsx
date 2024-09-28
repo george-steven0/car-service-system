@@ -1,7 +1,7 @@
 import { Box, Button, Modal } from "@mui/material";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { FaRegTimesCircle } from "react-icons/fa";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../Components/Redux/TsHooks";
 import { editCar, getAllCars, getCarBrand } from "../../../Components/Redux/Slices/Cars/carSlice";
 import { resetPage } from "../../../Components/Redux/Slices/ResetPagination/resetPagination";
@@ -48,7 +48,7 @@ const EditCarModal = ({open,close,data,t,lang}:ModalType) => {
             brands : brands
         }
     })
-    const {register,handleSubmit,formState,setValue,control,reset} = form
+    const {register,handleSubmit,formState,control,reset} = form
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const {errors}:any = formState
 

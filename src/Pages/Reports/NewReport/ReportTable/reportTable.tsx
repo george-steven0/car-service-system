@@ -15,7 +15,7 @@ type reportPropsType = {
     getValues?:UseFormGetValues<reportData>,
     setValue?: UseFormSetValue<reportData> | undefined,
 }
-const ReportTable:React.FC<reportPropsType> = ({register,control,setValue}) => {
+const ReportTable:React.FC<reportPropsType> = ({register}) => {
 
     const reportPartList:reportTableList = [
         {id:1,nameAr:'المحرك',status:'good'},
