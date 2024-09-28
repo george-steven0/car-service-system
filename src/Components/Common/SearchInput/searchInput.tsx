@@ -1,7 +1,6 @@
-import { FormControl, IconButton, InputAdornment, OutlinedInput } from "@mui/material";
-import { CiSearch } from "react-icons/ci";
+import { FormControl, InputAdornment, OutlinedInput } from "@mui/material";
 import { useAppDispatch } from "../../Redux/TsHooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { apiParamsType, billState } from "../../Types/types";
 
@@ -12,9 +11,9 @@ type search = {
 }
 const SearchInput = ({apiFunc,placeholder,getsearchValue}:search) => {
 
-    const [searchValue, setsearchValue] = useState('')
-    const [page,setpage] = useState(1)
-    const [size,setsize] = useState(10)
+    const [, setsearchValue] = useState('')
+    const [page,] = useState(1)
+    const [size,] = useState(10)
 
     const dispatch = useAppDispatch()
 

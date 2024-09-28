@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import PersonalInfo from "../NewBill/PersoanlInfo/billPersonalInfo";
 import { useFieldArray, useForm } from "react-hook-form";
 import { BillFormData } from "../../../Components/Types/types";
@@ -6,7 +6,7 @@ import PartsInfo from "../NewBill/PartsInfo/partsInfo";
 import LaboursInfo from "../NewBill/LabooursInfo/laboursInfo";
 import NotesInfo from "../NewBill/NotesInfo/notes";
 import TotalInfo from "../NewBill/TotalBill/totalBillInfo";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaAngleRight } from "react-icons/fa";
 import { MdLocalPrintshop } from "react-icons/md";
 import './viewbill.scss'
@@ -16,7 +16,6 @@ import Footer from "../../../Components/Layout/footer";
 
 const ViewBill = React.forwardRef((props, ref) => {
     const [isPrint,setisPrint] = useState(false)
-    const location = useLocation()
     // console.log(location?.state?.data);
     
     const {register,control,handleSubmit,formState,setValue,watch,getValues,unregister} = useForm<BillFormData>({

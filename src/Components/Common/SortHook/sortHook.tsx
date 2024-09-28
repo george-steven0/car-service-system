@@ -1,6 +1,6 @@
-import { useState, useEffect, ReactElement } from 'react';
-import { DispatchFunction, FormValues, apiParamsType, billTableData } from '../../Types/types';
-import { SortOrder, TableColumn } from 'react-data-table-component';
+import { useState, useEffect } from 'react';
+import { DispatchFunction, apiParamsType } from '../../Types/types';
+import { TableColumn } from 'react-data-table-component';
 import { BsDot, BsSortDown, BsSortUp } from 'react-icons/bs';
 
 
@@ -18,7 +18,8 @@ export const useRemoteSort:RemoteSortHook<any> = (apiFunction, dispatch, page, s
     const [dir, setDir] = useState<string|null|undefined>(null);
     const [icon, seticon] = useState<JSX.Element>(<BsSortUp />);
 
-    const handleRemoteSort = <T,>(column:TableColumn<T>,dir?:SortOrder) => {
+    // const handleRemoteSort = <T,>(column:TableColumn<T>,dir?:SortOrder) => {
+    const handleRemoteSort = <T,>(column:TableColumn<T>) => {
         const colName = column?.name;
         if (typeof colName === 'string' || colName === null || colName === undefined) {
             if (col === colName && sortCount === 0) {
@@ -42,7 +43,7 @@ export const useRemoteSort:RemoteSortHook<any> = (apiFunction, dispatch, page, s
 
     useEffect(() => {
         dispatch(apiFunction({ page, size, col, dir, paginated, searchValue,type }));
-    }, [apiFunction, col, dir, dispatch, page, searchValue, size, type]);
+    }, [apiFunction, col, dir, dispatch, page, paginated, searchValue, size, type]);
 
     return { handleRemoteSort,icon };
 };

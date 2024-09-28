@@ -1,7 +1,5 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { useState } from "react";
-import SearchInput from "../../Components/Common/SearchInput/searchInput";
-import { getBills } from "../../Components/Redux/Slices/Bills/bills";
 import { Link } from "react-router-dom";
 import ReportsDatatable from "./ReportsDatatable/reportDatatable";
 
@@ -19,7 +17,7 @@ const Reports = () => {
         {label:'cancelled',param:'cancelled'},
     ]
 
-    const filterClickHandler = (index:number,item:filterItem)=>{
+    const filterClickHandler = (index:number,_:filterItem)=>{
         setActiveTab(index)
         // const dateRange = item?.param
         // dispatch(getRidersStatistics({dateRange}))
@@ -103,7 +101,7 @@ const Reports = () => {
                     <div className="flex items-center gap-x-2">
 
                         <div className="search-wrapper">
-                            <SearchInput apiFunc={getBills} placeholder="Search Reports" />
+                            {/* <SearchInput apiFunc={getBills} placeholder="Search Reports" /> */}
                         </div>
 
                         <div>

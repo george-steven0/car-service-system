@@ -1,9 +1,7 @@
 import './reportTable.scss'
 import RadioComponent from "./radioComponent";
-import { Control, FieldArrayWithId, FieldErrors, FieldValues, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { Control, FieldErrors, FieldValues, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { reportData } from '../../../../Components/Types/types';
-import { Button } from '@mui/material';
-import { useEffect } from 'react';
 type reportTableList = {
     id:number,
     nameAr:string,
@@ -64,7 +62,7 @@ const ReportTable:React.FC<reportPropsType> = ({register,control,setValue}) => {
 
                         <section className="grid-table-body w-full font-semibold p-2">
                             <div  className="grid grid-cols-4 justify-between items-center border-white text-center [&>div]:py-2">
-                                {reportPartList?.slice(0,14)?.map( (item,index)=>(
+                                {reportPartList?.slice(0,14)?.map( (item,_)=>(
                                     <div className="item-row col-span-4 grid grid-cols-4 border-b" key={item?.id}>
                                         <div>
                                             <span>{item?.nameAr}</span>
@@ -92,7 +90,7 @@ const ReportTable:React.FC<reportPropsType> = ({register,control,setValue}) => {
 
                         <section className="grid-table-body w-full font-semibold p-2">
                             <div  className="grid grid-cols-4 justify-between items-center border-white text-center [&>div]:py-2">
-                                {reportPartList?.slice(14,28)?.map( (item,index)=>(
+                                {reportPartList?.slice(14,28)?.map( (item,_)=>(
                                     <div className="item-row col-span-4 grid grid-cols-4 border-b" key={item?.id}>
                                         <div>
                                             <span>{item?.nameAr}</span>

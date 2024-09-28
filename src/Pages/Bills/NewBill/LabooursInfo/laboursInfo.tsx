@@ -15,7 +15,7 @@ type LaboursFormProps = {
     isPrint?:boolean
 }
 
-const LaboursInfo:React.FC<LaboursFormProps> = ({register,errors,control,setValue,labours,add,remove,isPrint}) => {
+const LaboursInfo:React.FC<LaboursFormProps> = ({register,labours,add,remove,isPrint}) => {
     const {t} = useTranslation()
     return ( 
         <article className="bill-labours-wrapper p-2 ronded-sm shadow-md bg-white py-3 rounded-md">
@@ -37,7 +37,7 @@ const LaboursInfo:React.FC<LaboursFormProps> = ({register,errors,control,setValu
                     : null
                 }
 
-                {labours&&labours?.map( (item,index)=>(
+                {labours&&labours?.map( (_,index)=>(
 
                     <div key={index} className="flex gap-x-3 border-b pb-3 w-full items-center justify-between [&>div>label]:block [&>div>label]:text-lg [&>div>label]:font-semibold [&>div>input]:grow [&>div>input]:p-3 [&>div>input]:rounded-md [&>div>input]:bg-mainLightBlue [&>div>input]:focus-within:outline-0 [&>div>input]:transition-all [&>div>input]:duration-200" >
                         <div className="w-full">

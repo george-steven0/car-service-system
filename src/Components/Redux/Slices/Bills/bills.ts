@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { HttpError, apiParamsType } from "../../../Types/types";
 import axios from 'axios'
+import { errorToast } from "../Toast-Messages/toastMessage";
 // import { toast } from "react-toastify"
 
 export const getBills = createAsyncThunk("BillsFunc", async({page,size,col,dir,searchValue} : apiParamsType, {rejectWithValue,dispatch})=>{
@@ -21,25 +22,19 @@ export const getBills = createAsyncThunk("BillsFunc", async({page,size,col,dir,s
         const httpError = error as HttpError;
 
         if (httpError.response && httpError.response.data) {
-            // Now TypeScript knows that `httpError` is an HttpError object
-            return rejectWithValue(httpError.response.data.message)
-        } else if(navigator.onLine === false){
-            // dispatch(errorToast('Check Internet Connection'))
+            if(Array?.isArray(httpError?.response?.data?.errors)){
+                httpError?.response?.data && httpError?.response?.data?.errors?.map(item=>dispatch(errorToast(item)))
+            } else{
+                dispatch(errorToast(httpError?.response?.data?.errors))
+            }
+            return rejectWithValue(httpError?.response?.data?.errors)
+            } else if(navigator.onLine === false){
+                dispatch(errorToast('Check Internet Connection'))
+            }
+            
+            else {
+                return rejectWithValue(httpError?.message)
         }
-        else {
-            return rejectWithValue(httpError.message)
-        }
-
-        // if (error.response && error.response.data) {
-        //     // dispatch(errorToast(error.response.data.message))
-        //     return rejectWithValue(error.response.data.message)
-        // } else if(navigator.onLine === false){
-        //     // dispatch(errorToast('Check Internet Connection'))
-        // }
-        
-        // else {
-        //     // return rejectWithValue(error.message)
-        // }
     }
 })
 

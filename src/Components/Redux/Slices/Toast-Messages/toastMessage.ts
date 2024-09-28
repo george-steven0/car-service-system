@@ -7,11 +7,17 @@ export const MessageSlice = createSlice({
 		message: "",
 	},
 	reducers: {
-		errorToast: (_, action) =>
-			toast.error(action.payload, { toastId: "error1" }),
+		errorToast: (state, action) => {
+			toast.error(action.payload, { toastId: "error1" });
+			state.message = action.payload
+			return state
+		},
 
-		success: (_, action) =>
-			toast.success(action.payload, { toastId: "success1" }),
+		success: (state, action) => {
+			toast.success(action.payload, { toastId: "success1" });
+			state.message = action.payload; // Update the state
+			return state;
+		}
 	},
 })
 

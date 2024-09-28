@@ -2,11 +2,11 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Tooltip }
 import { ApexOptions } from 'apexcharts';
 import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { useAppSelector } from '../../../../Components/Redux/TsHooks';
+// import { useAppSelector } from '../../../../Components/Redux/TsHooks';
 import { translationType } from '../../../../Components/Types/types';
 
 const IncomeChart:React.FC<translationType> = ({t}) => {
-    const {lang} = useAppSelector(state=>state?.lang)
+    // const {lang} = useAppSelector(state=>state?.lang)
     const [range, setrange] = useState<string>('');
 
     const handleChange = (event: SelectChangeEvent) => {

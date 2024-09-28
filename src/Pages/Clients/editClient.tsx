@@ -8,8 +8,8 @@ import { useAppDispatch, useAppSelector } from "../../Components/Redux/TsHooks";
 import { useEffect } from "react";
 import { editClient, getAllClients, getClientById } from "../../Components/Redux/Slices/Clients/clients";
 import { resetPage } from "../../Components/Redux/Slices/ResetPagination/resetPagination";
-import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
+import { getCarBrand } from "../../Components/Redux/Slices/Cars/carSlice";
 
 export type ModalType = {
     open : boolean,
@@ -25,6 +25,7 @@ const EditClientModal = ({open,close,data}:ModalType) => {
 
     const dispatch = useAppDispatch()
     const {cars} = useAppSelector(state =>state?.cars)
+    const {brands} = useAppSelector(state =>state?.cars)
 
     const {clientById} = useAppSelector(state =>state?.clients)
     
@@ -48,9 +49,12 @@ const EditClientModal = ({open,close,data}:ModalType) => {
 
             clientById?.cars?.forEach((car, index) => {
                 setValue(`cars.${index}.car_type_id`, car?.carType?.id || '');
+                setValue(`cars.${index}.brand_id`, car?.brand?.id || '');
             });
         }
     }, [dispatch, id, clientById, setValue])
+    
+    // console.log(clientById);
     
     
     useEffect(() => {
@@ -61,6 +65,7 @@ const EditClientModal = ({open,close,data}:ModalType) => {
             cars: clientById?.cars.map(car => ({
                 ...car,
                 car_type_id: car?.carType?.id,
+                brand_id: car?.brand?.id,
             })) || [],
             };
             reset(defaultValues); // Reset form state with default values
@@ -77,13 +82,17 @@ const EditClientModal = ({open,close,data}:ModalType) => {
 
     const handleAddClientCar = ()=>{
         append({
-            make: "",
             model: "",
             car_type_id : "",
             plate_number: "",
             chase_number: "",
             motor_number: "",
             color:"",
+            brand : {
+                id: null,
+                name : ""
+            },
+            brand_id : ""
         })
     }
 
@@ -116,6 +125,9 @@ const EditClientModal = ({open,close,data}:ModalType) => {
         close()
     }
         
+
+    // console.log(getValues());
+    
     return ( 
         <>
         <Modal
@@ -173,7 +185,7 @@ const EditClientModal = ({open,close,data}:ModalType) => {
 
                             <section className="addClientCarForm  px-3 max-h-[350px] overflow-hidden overflow-y-auto col-span-2 grid grid-cols-1 md:grid-cols-3 gap-5 [&>div>label]:block [&>div>label]:text-[#333] [&>div>label]:font-semibold [&>div>label]:mb-1 [&>div>input]:w-full [&>div>input]:p-3 [&>div>input]:bg-mainLightBlue [&>div>input]:rounded-md [&>div>input]:outline-none [&>div>input]:shadow-sm">
                                 {fields?.map( (field,index)=>(
-                                    <>
+                                    <>                                    
                                         <div className="text-blue-500 col-span-3 m-0 flex items-center justify-between">
                                             <span>{t('common.car')} #  {index+1}</span>
                                             {
@@ -183,15 +195,15 @@ const EditClientModal = ({open,close,data}:ModalType) => {
                                                 <span></span>
                                             }
                                         </div>
-                                        {/* {console.log(field?.carType)} */}
+
                                         <div>
-                                            <label>{t('common.brand')}:</label>
+                                            <label>{t('common.carType')}:</label>
                                             <Controller
                                                 control={control}
-                                                name={`cars.${index}.makeobject`}
+                                                name={`cars.${index}.carType`}
                                                 rules={{ required: t('common.required') }}
-                                                defaultValue={field?.carType || ''}
-                                                value={field?.carType}
+                                                defaultValue={field?.carType}
+                                                // value={field?.carType}
                                                 render={({ field }) => (
                                                     <Autocomplete
                                                         options={cars?.data || []}
@@ -206,11 +218,15 @@ const EditClientModal = ({open,close,data}:ModalType) => {
                                                                 // helperText={errors.cars?.[index]?.make?.message}
                                                             />
                                                         )}
-                                                        onChange={(event, data) => {
+                                                        onChange={(_, data) => {
                                                             field.onChange(data)
                                                             if(data){
+                                                                console.log(data);
+                                                                
                                                                 setValue(`cars.${index}.car_type_id`,data?.id || '')
-                                                                setValue(`cars.${index}.make`,data?.name || '')
+                                                                // setValue(`cars.${index}.brand_id`,null)
+                                                                setValue(`cars.${index}.brand`,null)
+                                                                dispatch(getCarBrand(data?.id))
                                                             }
                                                             // console.log(event);
                                                             // console.log(data);
@@ -223,6 +239,41 @@ const EditClientModal = ({open,close,data}:ModalType) => {
                                         </div>
 
                                         <div>
+                                            <label>{t('common.brand')}:</label>
+                                            <Controller
+                                                control={control}
+                                                name={`cars.${index}.brand`}
+                                                rules={{ required: t('common.required') }}
+                                                render={({ field }) => (
+                                                    <Autocomplete
+                                                        sx={{'&.MuiAutocomplete-root .MuiOutlinedInput-root' : {p:'5px'}, 'fieldset' : {border:0,outline:0,borderRadius:'6px'}, '&.MuiAutocomplete-root' : {backgroundColor : "#f3f6f9",borderRadius:'6px'}}}
+                                                        options={brands || []}
+                                                        getOptionLabel={(option) => option?.name || ''}
+                                                        renderInput={(params) => (
+                                                            <TextField
+                                                                {...params}
+                                                                // label="Car Model"
+                                                                // error={!!errors.cars?.[index]?.make}
+                                                                // helperText={errors.cars?.[index]?.make?.message}
+                                                            />
+                                                        )}
+                                                        {...field}
+                                                        onChange={(_, data) => {
+                                                            field.onChange(data)
+                                                            if(data){
+                                                                setValue(`cars.${index}.brand_id`,data?.id || '')
+                                                            }
+                                                            // console.log(event);
+                                                            // console.log(data);
+                                                            
+                                                        }}
+                                                    />
+                                                )}
+                                            />
+                                            {errors && <p className="text-red-500 text-xs w-full text-left mt-1">{errors?.cars?.[index]?.brand?.message}</p>}
+                                        </div>
+
+                                        <div>
                                             <label>{t('common.model')}:</label>
                                             <input type="text" {...register(`cars.${index}.model`,{
                                                 required:{
@@ -231,17 +282,6 @@ const EditClientModal = ({open,close,data}:ModalType) => {
                                                 }
                                             })} />
                                             {errors && <p className="text-red-500 text-xs w-full text-left mt-1">{errors?.cars?.[index]?.model?.message}</p>}
-                                        </div>
-
-                                        <div>
-                                            <label>{t('common.plateNumber')}:</label>
-                                            <input type="text" {...register(`cars.${index}.plate_number`,{
-                                                required:{
-                                                    value:true,
-                                                    message : t('common.required')
-                                                }
-                                            })} />
-                                            {errors && <p className="text-red-500 text-xs w-full text-left mt-1">{errors?.cars?.[index]?.plate_number?.message}</p>}
                                         </div>
 
                                         <div>
@@ -276,6 +316,19 @@ const EditClientModal = ({open,close,data}:ModalType) => {
                                             })} />
                                             {errors && <p className="text-red-500 text-xs w-full text-left mt-1">{errors?.cars?.[index]?.color?.message}</p>}
                                         </div>
+
+
+                                        <div className="col-span-2">
+                                            <label>{t('common.plateNumber')}:</label>
+                                            <input type="text" {...register(`cars.${index}.plate_number`,{
+                                                required:{
+                                                    value:true,
+                                                    message : t('common.required')
+                                                }
+                                            })} />
+                                            {errors && <p className="text-red-500 text-xs w-full text-left mt-1">{errors?.cars?.[index]?.plate_number?.message}</p>}
+                                        </div>
+
                                     </>
                                 ) )}
                             </section>
@@ -283,7 +336,7 @@ const EditClientModal = ({open,close,data}:ModalType) => {
                             
                         </section>
 
-                        <section className="mt-8">
+                        <section className="mt-8 text-center">
                             <Button type="submit" className="bg-mainBlue text-white font-semibold min-w-[150px] capitalize">{t('common.edit')}</Button>
                         </section>
                     </form>

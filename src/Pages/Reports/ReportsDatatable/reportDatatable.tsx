@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DataTable, { TableColumn, TableStyles } from "react-data-table-component";
 import { billTableData } from "../../../Components/Types/types";
-import {useRemoteSort} from '../../../Components/Common/SortHook/sortHook'
-import { FaEdit, FaEye, FaSortAmountUp } from "react-icons/fa";
-import { getBills } from "../../../Components/Redux/Slices/Bills/bills";
-import { useAppDispatch } from "../../../Components/Redux/TsHooks";
+import { FaEdit, FaEye } from "react-icons/fa";
+import { useAppDispatch, useAppSelector } from "../../../Components/Redux/TsHooks";
 import { useNavigate } from "react-router-dom";
-import { ListItemButton, Menu, MenuItem } from "@mui/material";
+import { Button, Menu, MenuItem } from "@mui/material";
 import {BiDotsHorizontalRounded} from 'react-icons/bi'
 import { Link } from "react-router-dom";
+import { useRemoteSort } from "../../../Components/Common/SortHook/sortHook";
+import { getAllClients } from "../../../Components/Redux/Slices/Clients/clients";
+import { tableStyle } from "../../../Components/Common/TableStyle/tableStyle";
 
 const ActionCell = ({data}:{data:billTableData})=>{
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const dispatch = useAppDispatch()
 
     const open = Boolean(anchorEl);
     
@@ -26,7 +26,7 @@ const ActionCell = ({data}:{data:billTableData})=>{
 
     return (
         <div className='action-wrapper relative'>
-            <ListItemButton className='rounded-md' onClick={handleClick}><span><BiDotsHorizontalRounded className='text-xl' /></span></ListItemButton>
+            <Button className='rounded-md' onClick={handleClick}><span><BiDotsHorizontalRounded className='text-xl' /></span></Button>
             <Menu
                 id="datatable-action-menu"
                 aria-labelledby="datatable-action-button"
@@ -60,51 +60,17 @@ const ReportsDatatable = () => {
     const [size,setsize] = useState<number>(10)
     const [searchValue,setsearchValue] = useState<string>('')
     const dispatch = useAppDispatch()
+    const [paginated,setpaginated] = useState<number>(1)
 
-    const {handleRemoteSort, defState} = useRemoteSort(getBills,dispatch,page,size,searchValue)
+    const {currentPage} = useAppSelector((state) => state?.resetPagination);
+    const {toggle} = useAppSelector((state) => state?.resetPagination);
 
-    const customStyles:TableStyles = {
-        headRow: {
-            style: {
-            border: 'none',
-            backgroundColor : '#fff'
+    useEffect(() => {
+        setpage(currentPage)
+    }, [toggle])
 
-            },
-        },
-        headCells: {
-            style: {
-                color: '#B5B5C3',
-                fontSize: '14px',
-                position : 'relative',
-                justifyContent : 'center'
-            },
-        },
-        rows: {
-            highlightOnHoverStyle: {
-                backgroundColor: '#442b7e12',
-                borderBottomColor: '#FFFFFF',
-                borderRadius: '5px',
-                outline: '1px solid #FFFFFF',
-            },
-            style : {
-                cursor : 'pointer'
-            }
-        },
-        pagination: {
-            style: {
-                border: 'none',
-            },
-        },
-        cells: {
-            style:{
-                padding : '5px 0px',
-                fontSize : '12px',
-                justifyContent : 'center',
-                fontWeight : '500',
-                // cursor : 'pointer'
-            }
-        }
-    };
+
+    const {handleRemoteSort, icon} = useRemoteSort(getAllClients, dispatch, page, size, paginated, searchValue);
 
     const data:billTableData[] = [
         {id:1,name:'جورج استيفن عبد المسيح',date:'20-10-2022',carType:'Audi',chassie:'LSXM255633',motor:'MOS85526',color:'red'},
@@ -182,6 +148,7 @@ const ReportsDatatable = () => {
     return ( 
         <div>
             <DataTable
+                // direction={lang === 'ar' ? 'rtl' as Direction : 'ltr' as Direction}
                 columns={columns}
                 data={data}
                 pagination
@@ -191,15 +158,21 @@ const ReportsDatatable = () => {
                 // paginationTotalRows={couriers?.couriers?.meta?.total}
                 onChangePage={handlePageChange}
                 onChangeRowsPerPage={handleRowChange}
-                customStyles={customStyles}
+                customStyles={tableStyle}
                 highlightOnHover
                 onRowClicked={(data)=>navigate('viewreport',{state:{data:data,type:'view'}})}
                 sortServer
                 onSort={handleRemoteSort}
-                sortIcon={defState === 0 ? <FaSortAmountUp /> : <FaSortAmountUp className="text-[1px] opacity-0" />}
-                // selectableRows
-                // selectableRowsHighlight
-                // onSelectedRowsChange={(e)=>console.log(e)}
+                sortIcon={icon}
+                paginationDefaultPage={page}
+                keyField="clients-table"
+                paginationResetDefaultPage = {true}
+                paginationComponentOptions={
+                    {
+                        // rowsPerPageText : t('common.paginationRowText'),
+                        // rangeSeparatorText : t('common.paginationSeperateText')
+                    }
+                }
             />
         </div>
     );

@@ -4,7 +4,7 @@ import SearchInput from "../../Components/Common/SearchInput/searchInput";
 import ClientsTable from "./clientsTable";
 import AddClientModal from "./addClient";
 import { getAllClients } from "../../Components/Redux/Slices/Clients/clients";
-import { useAppDispatch, useAppSelector } from "../../Components/Redux/TsHooks";
+import { useAppSelector } from "../../Components/Redux/TsHooks";
 import Overlay from "../../Components/Common/Overlay/overlay";
 import { useTranslation } from "react-i18next";
 import Title from "../../Components/Common/Title/title";
@@ -18,8 +18,6 @@ const Clients = () => {
 
     const {t} = useTranslation()
     const {lang} = useAppSelector(state=>state?.lang)
-
-    const dispatch = useAppDispatch()
 
     const clients = useAppSelector( (state)=>state?.clients )
     

@@ -1,9 +1,9 @@
 import { Box, Button, Modal } from "@mui/material";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { FaRegTimesCircle } from "react-icons/fa";
-import { useEffect } from "react";
-import { useAppDispatch } from "../../../Components/Redux/TsHooks";
-import { editCar, getAllCars } from "../../../Components/Redux/Slices/Cars/carSlice";
+import { useEffect, useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "../../../Components/Redux/TsHooks";
+import { editCar, getAllCars, getCarBrand } from "../../../Components/Redux/Slices/Cars/carSlice";
 import { resetPage } from "../../../Components/Redux/Slices/ResetPagination/resetPagination";
 import { BiCommentAdd } from "react-icons/bi";
 import { RiDeleteBack2Line } from "react-icons/ri";
@@ -15,41 +15,51 @@ export type ModalType = {
     data : {
         id : number,
         name: string,
-        types : {
-            carType : string
+        brands : {
+            name : string
         }[]
     },
     t:TFunction,
-    lang?:string
+    lang?:string | null | undefined
 }
 
 type FormData = {
     name: string,
-    types : {
-        carType : string
+    brands : {
+        name : string
     }[]
 }
 
 const EditCarModal = ({open,close,data,t,lang}:ModalType) => {
     const dispatch = useAppDispatch()
+    const id = data?.id
+    const {brands} = useAppSelector(state=>state?.cars)
+    
+    useEffect(() => {
+        if (id && open) {
+            dispatch(getCarBrand(id))
+        }
+    }, [dispatch,id,open])
+    
+    
     const form = useForm<FormData>({
         defaultValues : {
             name : data?.name,
-            types : data?.types
+            brands : brands
         }
     })
-    const {register,handleSubmit,formState,setValue,control} = form
+    const {register,handleSubmit,formState,setValue,control,reset} = form
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const {errors}:any = formState
 
     const {fields,append,remove} = useFieldArray({
         control,
-        name : "types" // this name must be same as the one in the FormData Type carType
+        name : "brands" // this name must be same as the one in the FormData Type carType
     })
 
     const addCarType = ()=>{
         append([{
-            carType : ''
+            name : ''
         }])
     }
 
@@ -57,14 +67,15 @@ const EditCarModal = ({open,close,data,t,lang}:ModalType) => {
         remove(index)
     }
 
-    const id = data?.id
-
-    useEffect( ()=>{
-        if(data){
-            setValue('name',data?.name || '')
-            setValue('types',data?.types || [])
+    useEffect(() => {
+        if (id && brands) {
+        const defaultValues = {
+            name : data?.name || '',
+            brands: brands
+            };
+            reset(defaultValues); // Reset form state with default values
         }
-    }, [data, setValue] )
+        }, [id, brands, reset, data]);
 
     const modalSubmitHandler: SubmitHandler<FormData> = (data:{name:string})=>{
         if(id){
@@ -80,8 +91,6 @@ const EditCarModal = ({open,close,data,t,lang}:ModalType) => {
             } )
         }
     }
-    
-    // console.log(data);
     
     return ( 
         <>
@@ -135,7 +144,7 @@ const EditCarModal = ({open,close,data,t,lang}:ModalType) => {
                                         <label>{t('common.brand')}:</label>
                                         {index === 0 ? null : <Button onClick={()=>removeCarType(index)} className="text-danger bg-danger bg-opacity-25 flex justify-between items-center gap-x-1 p-1 mb-2 capitalize"><RiDeleteBack2Line /> {t('common.delete')}</Button>}
                                     </div>
-                                    <input type="text" {...register(`types.${index}.carType`,{
+                                    <input type="text" {...register(`brands.${index}.name`,{
                                         required:{
                                             value:true,
                                             message : t('common.required')
@@ -147,7 +156,7 @@ const EditCarModal = ({open,close,data,t,lang}:ModalType) => {
                         </section>
 
                         <section className="mt-8 text-center">
-                            <Button type="submit" className="bg-mainBlue text-white font-semibold min-w-[150px]">{t('common.edit')}</Button>
+                            <Button type="submit" className="bg-mainBlue text-white font-semibold min-w-[150px] capitalize">{t('common.edit')}</Button>
                         </section>
                     </form>
                 </Box>

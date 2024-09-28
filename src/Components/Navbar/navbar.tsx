@@ -1,8 +1,5 @@
 import { MdSwapHoriz } from "react-icons/md"; 
 import { TbLanguage } from "react-icons/tb"; 
-import { TbLanguageKatakana } from "react-icons/tb"; 
-import { FaLanguage } from "react-icons/fa"; 
-
 import { FaCarSide, FaHome } from "react-icons/fa";
 import { navbarLinksType, navbarPropsType } from "../Types/types";
 import { TfiSettings } from "react-icons/tfi";
@@ -14,7 +11,7 @@ import { Button, Tooltip } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { MdAccountBalance } from "react-icons/md";
 import { PiUsersThree } from "react-icons/pi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../Redux/TsHooks";
 

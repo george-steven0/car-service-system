@@ -156,8 +156,12 @@ export type clients = {
 // cars
 
 export type carsData = {
-    id?:number
-    name?:string
+    id:number
+    name:string,
+    brands : {
+        id:number
+        name:string
+    }[]
 }
 
 export type carObject = {
@@ -180,17 +184,24 @@ export type carObject = {
 
 export type Car = {
     id?:number|string
-    make: string;
-    makeobject? : string
+    makeobject? : {
+        id:number,
+        name: string;
+    }
     model: string;
+    brand : {
+        id : number | null,
+        name : string
+    } | null
     car_type_id : string | number;
+    brand_id : string | number | null
     plate_number?: string;
     chase_number?: string | number;
     motor_number?: string | number;
     color:string,
     carType? : {
-        id?:string | number,
-        name?: string;
+        id:number,
+        name: string;
     }
 };
 

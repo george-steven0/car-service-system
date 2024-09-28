@@ -1,8 +1,7 @@
-import { Box, Button, MenuItem, Modal, Select, SelectChangeEvent } from "@mui/material";
+import { Box, Button, MenuItem, Modal, Select } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { sparepartTableData } from "../../Components/Types/types";
 import { FaRegTimesCircle } from "react-icons/fa";
-import { useState } from "react";
 import { useAppDispatch } from "../../Components/Redux/TsHooks";
 import { addSparepart, getAllSpareparts } from "../../Components/Redux/Slices/Spareparts/sparePartSlice";
 import { resetPage } from "../../Components/Redux/Slices/ResetPagination/resetPagination";
@@ -12,20 +11,14 @@ export type ModalType = {
     open : boolean,
     close : ()=>void,
     t:TFunction,
-    lang:string
+    lang?:string | null | undefined
 }
 const AddSParepart = ({open,close,t,lang}:ModalType) => {
     const dispatch = useAppDispatch()
     const form = useForm()
-    const {register,control,handleSubmit,formState,setValue,getValues,reset} = form
+    const {register,control,handleSubmit,formState} = form
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const {errors}:any = formState
-
-    const [age, setAge] = useState<string>('');
-
-    const handleChange = (event:SelectChangeEvent<string>) => {
-        setAge(event.target.value);
-    };
 
     const modalSubmitHandler = async (data:sparepartTableData)=>{
         const page = 1,

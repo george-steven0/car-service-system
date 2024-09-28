@@ -1,8 +1,8 @@
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import PersonalInfo from "../../Bills/NewBill/PersoanlInfo/billPersonalInfo";
 import { reportData } from "../../../Components/Types/types";
 import ReportTable from "../NewReport/ReportTable/reportTable";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import NotesInfo from "../../Bills/NewBill/NotesInfo/notes";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";

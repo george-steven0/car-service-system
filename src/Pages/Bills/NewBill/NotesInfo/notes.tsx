@@ -1,6 +1,5 @@
 import { Control,FieldErrors, UseFormReturn} from "react-hook-form";
-import { BillFormData, labours } from "../../../../Components/Types/types";
-import { Button } from "@mui/material";
+import { BillFormData } from "../../../../Components/Types/types";
 import { useTranslation } from "react-i18next";
 
 type NotesFormProps = {
@@ -11,7 +10,7 @@ type NotesFormProps = {
     // watch:UseFormReturn['watch'],
 }
 
-const NotesInfo:React.FC<NotesFormProps> = ({register,errors,control,setValue}) => {
+const NotesInfo:React.FC<NotesFormProps> = ({register}) => {
     const {t} = useTranslation()
     return ( 
         <article className="bill-labours-wrapper p-2 ronded-sm shadow-md bg-white py-3 rounded-md">

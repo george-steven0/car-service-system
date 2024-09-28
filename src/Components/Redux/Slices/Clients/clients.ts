@@ -169,16 +169,39 @@ export const deleteClient = createAsyncThunk("deleteClientFunc", async(id:number
 
 export type clientInit = {
     loading : boolean,
-    clients : { data : { id:number, name:string, phone : string | number }[],meta?: {
-        current_page?: string | number,
-        from?: string | number,
-        last_page?: string | number,
-        path?:string | number ,
-        per_page?: string | number,
-        to?: string | number,
-        total?: string | number
-    }} | {data : []} ,
-    clientById : {id:number | string, name:string, phone:string, cars:Car[]} | null 
+    clients : { 
+        data: {
+            id: number;
+            name: string;
+            phone: string | number;
+            cars: Car[];
+        }[],
+        meta?: {
+            current_page?: string | number;
+            from?: string | number;
+            last_page?: string | number;
+            path?: string | number;
+            per_page?: string | number;
+            to?: string | number;
+            total?: number;
+        };
+    } | {
+        data: [];
+        meta?: {
+            current_page?: string | number;
+            from?: string | number;
+            last_page?: string | number;
+            path?: string | number;
+            per_page?: string | number;
+            to?: string | number;
+            total?: number;
+        };
+    },
+    clientById : {
+            id:number | string, name:string, phone:string, cars:Car[], brands : {
+                id:number
+                name:string
+            }[]} | null 
     errors? : [] | unknown | undefined | null
 }
 

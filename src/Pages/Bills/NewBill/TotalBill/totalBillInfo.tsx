@@ -1,4 +1,4 @@
-import { Control, FieldErrors, FieldValues, UseFormReturn, UseFormSetValue } from "react-hook-form";
+import { Control, FieldErrors, UseFormReturn, UseFormSetValue } from "react-hook-form";
 import { BillFormData } from "../../../../Components/Types/types";
 import { useState } from "react";
 import { Button } from "@mui/material";
@@ -15,7 +15,7 @@ type TotalFormProps = {
     isPrint? : boolean
 }
 
-const TotalInfo:React.FC<TotalFormProps> = ({register,control,errors,setValue,watch,calc,unregister,isPrint}) => {
+const TotalInfo:React.FC<TotalFormProps> = ({register,setValue,watch,calc,unregister,isPrint}) => {
     const {t} = useTranslation()
     const [tax, settax] = useState<boolean>(false)
     const toggleTaxInput = ()=>{

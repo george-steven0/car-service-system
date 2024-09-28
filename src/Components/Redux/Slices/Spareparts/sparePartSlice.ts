@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { HttpError, FormValues, Car, sparepartTableData } from '../../../Types/types';
+import { HttpError, sparepartTableData } from '../../../Types/types';
 import axios from 'axios'
 import { toast } from "react-toastify"
 import { errorToast } from "../Toast-Messages/toastMessage";
@@ -14,7 +14,7 @@ type getAllParts = {
     type? : string
 }
 
-export const getAllSpareparts = createAsyncThunk("getAllSparepartsFunc", async({type,paginated,page,size,searchValue}:getAllParts, {rejectWithValue, dispatch})=>{
+export const getAllSpareparts = createAsyncThunk("getAllSparepartsFunc", async({type,page,size,searchValue}:getAllParts, {rejectWithValue, dispatch})=>{
     
     const url = `/spare-parts?paginated=${1}${page ? `&page=${page}` : ''}${size ? `&size=${size}` : ''}${searchValue ? `&searchValue=${searchValue}` : '' }${type && type !== '' ? `&type=${type}` : ''}` ;
     try {

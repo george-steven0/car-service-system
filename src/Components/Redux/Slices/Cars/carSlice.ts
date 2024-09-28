@@ -6,7 +6,8 @@ import { errorToast } from "../Toast-Messages/toastMessage";
 
 export type initCarsState = {
     loading : boolean,
-    cars : { data : carsData[] } | null
+    cars : { data : carsData[] } | null,
+    brands : [],
     errors : null | [] | unknown
 }
 
@@ -166,9 +167,45 @@ export const deleteCar = createAsyncThunk("deleteCarFunc", async(id:number, {rej
     }
 })
 
+export const getCarBrand = createAsyncThunk("getCarBrandFunc", async(id:number, {rejectWithValue, dispatch})=>{
+    // console.log(page,size);
+    // let colCheck;
+    
+    // if (col) {
+    //     colCheck = col === 'Joining Date' ? 'created_at' : col === 'Updated at' ? 'updated_at' : col === 'Name' ? 'full_name' : col === 'Status' ? 'is_active' : col.replace(/\s+/g, '').toLowerCase();
+    // }
+    
+    const url = `/car-types/${id}/brands`;
+    try {
+        const res = await axios.get(url)
+        // console.log(res);
+        return res.data
+
+    } catch(error:unknown){
+        const httpError = error as HttpError;
+
+        if (httpError.response && httpError.response.data) {
+            if(Array?.isArray(httpError?.response?.data?.errors)){
+                httpError?.response?.data && httpError?.response?.data?.errors?.map(item=>dispatch(errorToast(item)))
+            } else{
+                dispatch(errorToast(httpError?.response?.data?.errors))
+            }
+            return rejectWithValue(httpError?.response?.data?.errors)
+            } else if(navigator.onLine === false){
+                dispatch(errorToast('Check Internet Connection'))
+            }
+            
+            else {
+                return rejectWithValue(httpError?.message)
+        }
+    }
+})
+
+
 const initialState:initCarsState = {
     loading : false,
     cars : null,
+    brands : [],
     errors : null
 }
 export const CarSlice = createSlice({
@@ -214,6 +251,18 @@ export const CarSlice = createSlice({
             state.loading = false
         })
         .addCase(deleteCar.rejected, (state,action)=>{
+            state.loading = false
+            state.errors = action?.payload
+        })
+
+        .addCase(getCarBrand.pending, (state)=>{
+            state.loading = true
+        })
+        .addCase(getCarBrand.fulfilled, (state,action)=>{
+            state.loading = false
+            state.brands = action?.payload?.data || []
+        })
+        .addCase(getCarBrand.rejected, (state,action)=>{
             state.loading = false
             state.errors = action?.payload
         })

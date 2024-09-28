@@ -2,7 +2,7 @@ import { FaAngleDown } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa"; 
 import { FaAngleRight } from "react-icons/fa"; 
 import { useEffect, useState } from "react";
-import DataTable, { TableColumn } from "react-data-table-component";
+import DataTable, { Direction, TableColumn } from "react-data-table-component";
 import { useAppDispatch, useAppSelector } from "../../Components/Redux/TsHooks";
 import { Button, Menu, MenuItem } from "@mui/material";
 import {BiDotsHorizontalRounded} from 'react-icons/bi'
@@ -18,7 +18,7 @@ import { resetPage } from "../../Components/Redux/Slices/ResetPagination/resetPa
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 
-const ActionCell = ({data,t,lang}:{data:FormValues,t:TFunction,lang:string})=>{
+const ActionCell = ({data,t,lang}:{data:FormValues,t:TFunction,lang?:string | null | undefined})=>{
     const id = data?.id
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -98,12 +98,19 @@ type expandleProps = {
     client : {
         cars : {
             id?:number|string
-            make: string;
+            carType: {
+                id:number,
+                name:string
+            };
             model: string;
             plate_number?: string;
             chase_number?: string | number;
             motor_number?: string | number;
             color:string,
+            brand : {
+                id:number,
+                name:string
+            }
         }[]
     }
 }
@@ -121,15 +128,14 @@ const ExpandedComponent = ({ data }:{data:FormValues}) => {
             });
         }
     }, [dispatch, id]);
-
-    // console.log(clientData?.client?.cars);
     
     
     return(
         <div className="mb-2">
             <div className="bg-mainLightBlue p-2">
-                <div className="col-span-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 mb-2 text-mainBlue pb-2 border-b-2 border-mainBlue">
+                <div className="col-span-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 mb-2 text-mainBlue pb-2 border-b-2 border-mainBlue">
                     <p>#</p>
+                    <p>{t('common.carType')}</p>
                     <p>{t('common.brand')}</p>
                     <p>{t('common.model')}</p>
                     <p>{t('common.chassie')}</p>
@@ -138,9 +144,10 @@ const ExpandedComponent = ({ data }:{data:FormValues}) => {
                     <p>{t('common.color')}</p>
                 </div>
                 {clientData?.client?.cars?.map( (car,index)=>(
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 bg-mainLightBlue p-2 pb-1 border-b mb-1">
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 bg-mainLightBlue p-2 pb-1 border-b mb-1">
                         <p>{index + 1}</p>
-                        <p>{car?.make}</p>
+                        <p>{car?.carType?.name}</p>
+                        <p>{car?.brand?.name}</p>
                         <p>{car?.model}</p>
                         <p>{car?.chase_number}</p>
                         <p>{car?.motor_number}</p>
@@ -161,7 +168,7 @@ type clientsPropType = {
         // clients : { data : { id:number, name:string, phone : string | number}[] | []},
         clients : { 
                 data : { id:number, name:string, phone : string | number,cars: Car[]; }[],
-                meta: {
+                meta?: {
                     current_page?: string | number,
                     from?: string | number,
                     last_page?: string | number,
@@ -172,7 +179,7 @@ type clientsPropType = {
                 } 
             } | { 
                 data: [],
-                meta: {
+                meta?: {
                     current_page?: string | number,
                     from?: string | number,
                     last_page?: string | number,
@@ -186,14 +193,14 @@ type clientsPropType = {
     },
     searchValue? : string
     t : TFunction,
-    lang ?: string
+    lang: string | null
     
 }
 
 const ClientsTable = ({data,searchValue,t,lang}:clientsPropType) => {
     const [page,setpage] = useState<number>(1)
     const [size,setsize] = useState<number>(10)
-    const [paginated,setpaginated] = useState<number>(1)
+    const [paginated,_] = useState<number>(1)
 
     const dispatch = useAppDispatch()
 
@@ -299,7 +306,7 @@ const ClientsTable = ({data,searchValue,t,lang}:clientsPropType) => {
                 
         },
     ];
-
+    
     const handlePageChange = (page:number) => {
         setpage(page);
     };
@@ -313,7 +320,7 @@ const ClientsTable = ({data,searchValue,t,lang}:clientsPropType) => {
     return ( 
         <div>
             <DataTable
-                direction={lang === 'ar' ? 'rtl' : 'ltr'}
+                direction={lang === 'ar' ? 'rtl' as Direction : 'ltr' as Direction}
                 columns={columns}
                 data={data?.clients?.data || []}
                 pagination

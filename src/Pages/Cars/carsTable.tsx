@@ -1,7 +1,7 @@
 import { AiFillEdit } from "react-icons/ai"; 
 import { MdDeleteSweep } from "react-icons/md"; 
 import { useEffect, useState } from "react";
-import DataTable, { TableColumn } from "react-data-table-component";
+import DataTable, { Direction, TableColumn } from "react-data-table-component";
 import { useAppDispatch, useAppSelector } from "../../Components/Redux/TsHooks";
 import { Button, Menu, MenuItem } from "@mui/material";
 import {BiDotsHorizontalRounded} from 'react-icons/bi'
@@ -9,12 +9,14 @@ import { carObject, carsData } from '../../Components/Types/types';
 import EditCarModal from "./Modals/editCar";
 import { tableStyle } from "../../Components/Common/TableStyle/tableStyle";
 import { WarningModal } from "../../Components/Common/Modals/modals";
-import { deleteCar, getAllCars } from "../../Components/Redux/Slices/Cars/carSlice";
+import { deleteCar, getAllCars, getCarBrand } from "../../Components/Redux/Slices/Cars/carSlice";
 import { useRemoteSort } from "../../Components/Common/SortHook/sortHook";
 import { resetPage } from "../../Components/Redux/Slices/ResetPagination/resetPagination";
 import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
+import { FaAngleDown, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
-const ActionCell = ({data,t,lang}:{data:carsData,t:TFunction,lang:string})=>{
+const ActionCell = ({data,t,lang}:{data:carsData,t:TFunction,lang?:string | null | undefined})=>{
 
     const id = data?.id
 
@@ -92,18 +94,69 @@ const ActionCell = ({data,t,lang}:{data:carsData,t:TFunction,lang:string})=>{
     );
 }
 
-const CarsTable = ({data,searchValue,t,lang}:{data:carObject,searchValue:string,t:TFunction,lang:string }) => {
+type expandleProps = {
+    data : {
+        name : string,
+        id : number
+    }
+}
+
+type brands = {
+    data : {
+        name : string,
+        id : number
+    }[]
+}
+
+const ExpandedComponent = ({ data }:expandleProps) => {
+    const {t} = useTranslation()
+    const id = data?.id
+    const dispatch = useAppDispatch()
+    const [brands, setbrands] = useState<brands | null>(null);
+    
+    useEffect(() => {
+        if (id) {
+            dispatch(getCarBrand(id)).then((response) => {
+                setbrands(response?.payload);
+            });
+        }
+    }, [dispatch, id]);
+
+    // console.log(brands);
+    
+    
+    return(
+        <div className="mb-2">
+            <div className="bg-mainLightBlue p-2">
+                <div className="col-span-full grid grid-cols-2 gap-2 mb-2 text-mainBlue pb-2 border-b-2 border-mainBlue">
+                    <p>#</p>
+                    <p>{t('common.brand')}</p>
+                </div>
+                {brands?.data?.map( (brand,index:number)=>(
+                    <div key={index} className="grid grid-cols-2 gap-2 bg-mainLightBlue p-2 pb-1 border-b mb-1">
+                        <p>{index + 1}</p>
+                        <p>{brand?.name}</p>
+                    </div>
+                ) )}
+            </div>
+            
+        </div>
+    )
+};
+
+
+const CarsTable = ({data,searchValue,t,lang}:{data:carObject,searchValue:string,t:TFunction,lang?:string | null | undefined }) => {
     const dispatch = useAppDispatch()
     const [page,setpage] = useState<number>(1)
     const [size,setsize] = useState<number>(10)
-    const [paginated,setpaginated] = useState<number>(1)
+    const [paginated,] = useState<number>(1)
 
     const {currentPage} = useAppSelector((state) => state?.resetPagination);
     const {toggle} = useAppSelector((state) => state?.resetPagination);
 
     useEffect(() => {
         setpage(currentPage)
-    }, [toggle])
+    }, [currentPage, toggle])
 
     // const [searchValue,setsearchValue] = useState<string>('')
     // const dispatch = useAppDispatch()
@@ -149,7 +202,8 @@ const CarsTable = ({data,searchValue,t,lang}:{data:carObject,searchValue:string,
     return ( 
         <div>
             <DataTable
-                direction={lang === 'ar' ? 'rtl' : 'ltr'}
+                direction={lang === 'ar' ? 'rtl' as Direction : 'ltr' as Direction}
+
                 columns={columns}
                 data={data?.cars?.data || []}
                 pagination
@@ -164,8 +218,14 @@ const CarsTable = ({data,searchValue,t,lang}:{data:carObject,searchValue:string,
                 sortServer
                 sortIcon={icon}
                 onSort={handleRemoteSort}
-                paginationDefaultPage={page}
+                expandableRows 
+                expandableRowsComponent={ExpandedComponent}
+                expandableIcon={{
+                    collapsed : lang === 'en' ? <FaAngleRight /> : <FaAngleLeft />,
+                    expanded : <FaAngleDown />
+                }}
                 keyField="cars-table"
+                paginationDefaultPage={page}
                 paginationResetDefaultPage = {true}
                 paginationComponentOptions={
                     {

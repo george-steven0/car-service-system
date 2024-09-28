@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DataTable, { TableColumn } from "react-data-table-component";
+import DataTable, { Direction, TableColumn } from "react-data-table-component";
 import {useRemoteSort} from '../../Components/Common/SortHook/sortHook'
 import { useAppDispatch, useAppSelector } from "../../Components/Redux/TsHooks";
 import { Button, Menu, MenuItem } from "@mui/material";
@@ -14,7 +14,7 @@ import { resetPage } from "../../Components/Redux/Slices/ResetPagination/resetPa
 import EditSparepart from "./editSparepart";
 import { TFunction } from "i18next";
 
-const ActionCell = ({data,t,lang}:{data:sparepartTableData, t:TFunction, lang:string})=>{
+const ActionCell = ({data,t,lang}:{data:sparepartTableData, t:TFunction, lang?:string | null | undefined})=>{
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const dispatch = useAppDispatch()
 
@@ -110,7 +110,7 @@ type sparePartProps = {
     },
     searchValue:string,
     t:TFunction,
-    lang : string
+    lang : string | null
 }
 const SparepartsDatatable = ({type,data,searchValue,t,lang}:sparePartProps) => {
     const [page,setpage] = useState<number>(1)
@@ -202,7 +202,7 @@ const SparepartsDatatable = ({type,data,searchValue,t,lang}:sparePartProps) => {
     return ( 
         <div>
             <DataTable
-                direction={lang === 'ar' ? 'rtl' : 'ltr'}
+                direction={lang === 'ar' ? 'rtl' as Direction : 'ltr' as Direction}
                 columns={columns}
                 data={data?.spareparts?.data}
                 pagination

@@ -1,17 +1,16 @@
 import { useState } from "react";
-import DataTable, { TableColumn, TableStyles } from "react-data-table-component";
+import DataTable, { Direction, TableColumn } from "react-data-table-component";
 import { billTableData, translationType } from "../../../Components/Types/types";
 import { FaEdit, FaEye } from "react-icons/fa";
-import { useAppDispatch, useAppSelector } from "../../../Components/Redux/TsHooks";
+import { useAppSelector } from "../../../Components/Redux/TsHooks";
 import { useNavigate } from "react-router-dom";
-import { ListItemButton, Menu, MenuItem } from "@mui/material";
+import { Button, Menu, MenuItem } from "@mui/material";
 import {BiDotsHorizontalRounded} from 'react-icons/bi'
 import { Link } from "react-router-dom";
 import { tableStyle } from "../../../Components/Common/TableStyle/tableStyle";
 
 const ActionCell = ({data}:{data:billTableData})=>{
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const dispatch = useAppDispatch()
 
     const open = Boolean(anchorEl);
     
@@ -25,7 +24,7 @@ const ActionCell = ({data}:{data:billTableData})=>{
 
     return (
         <div className='action-wrapper relative'>
-            <ListItemButton className='rounded-md' onClick={handleClick}><span><BiDotsHorizontalRounded className='text-xl' /></span></ListItemButton>
+            <Button className='rounded-md' onClick={handleClick}><span><BiDotsHorizontalRounded className='text-xl' /></span></Button>
             <Menu
                 id="datatable-action-menu"
                 aria-labelledby="datatable-action-button"
@@ -40,7 +39,6 @@ const ActionCell = ({data}:{data:billTableData})=>{
                 vertical: 'top',
                 horizontal: 'left',
                 }}
-                PaperProps={{ style: { boxShadow: 'none',padding:0 } }}
                 className='shadow-md p-0'
             >
                 <div className='[&>li]:mb-2 [&>li>svg]:mr-2 [&>li>svg]:text-xl rounded-md overflow-hidden capitalize'>
@@ -56,10 +54,8 @@ const ActionCell = ({data}:{data:billTableData})=>{
 const BillsDatatable:React.FC<translationType> = ({t}) => {
     const {lang} = useAppSelector(state=>state?.lang)
     const navigate = useNavigate()
-    const [page,setpage] = useState<number>(1)
+    const [,setpage] = useState<number>(1)
     const [size,setsize] = useState<number>(10)
-    const [searchValue,setsearchValue] = useState<string>('')
-    const dispatch = useAppDispatch()
 
     // const {handleRemoteSort, defState} = useRemoteSort(getAllCars,dispatch,page,size,searchValue)
 
@@ -130,7 +126,8 @@ const BillsDatatable:React.FC<translationType> = ({t}) => {
     return ( 
         <div>
             <DataTable
-                direction={lang === 'ar' ? 'rtl' : 'ltr'}
+                direction={lang === 'ar' ? 'rtl' as Direction : 'ltr' as Direction}
+
                 columns={columns}
                 data={data}
                 pagination

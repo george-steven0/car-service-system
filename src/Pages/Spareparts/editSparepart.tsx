@@ -1,10 +1,9 @@
-import { Box, Button, MenuItem, Modal, Select, SelectChangeEvent } from "@mui/material";
-import { Controller, FieldErrors, useForm } from "react-hook-form";
+import { Box, Button, MenuItem, Modal, Select } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
 import { sparepartTableData } from "../../Components/Types/types";
 import { FaRegTimesCircle } from "react-icons/fa";
-import { useState } from "react";
 import { useAppDispatch } from "../../Components/Redux/TsHooks";
-import { addSparepart, editSparepart, getAllSpareparts } from "../../Components/Redux/Slices/Spareparts/sparePartSlice";
+import { editSparepart, getAllSpareparts } from "../../Components/Redux/Slices/Spareparts/sparePartSlice";
 import { resetPage } from "../../Components/Redux/Slices/ResetPagination/resetPagination";
 import { TFunction } from "i18next";
 
@@ -12,7 +11,7 @@ export type ModalType = {
     open : boolean,
     close : ()=>void,
     data : sparepartTableData,
-    lang:string,
+    lang?:string | null | undefined,
     t:TFunction
 }
 const EditSparepart = ({open,close,data,t,lang}:ModalType) => {
@@ -30,15 +29,9 @@ const EditSparepart = ({open,close,data,t,lang}:ModalType) => {
             buy_price : data?.buy_price
         }
     })
-    const {register,control,handleSubmit,formState,setValue,getValues,reset} = form
+    const {register,control,handleSubmit,formState} = form
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const {errors}:any = formState
-
-    const [age, setAge] = useState<string>('');
-
-    const handleChange = (event:SelectChangeEvent<string>) => {
-        setAge(event.target.value);
-    };
 
     const modalSubmitHandler = async (data:sparepartTableData)=>{
         const page = 1,

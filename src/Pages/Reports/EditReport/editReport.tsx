@@ -1,4 +1,4 @@
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import PersonalInfo from "../../Bills/NewBill/PersoanlInfo/billPersonalInfo";
 import { reportData } from "../../../Components/Types/types";
 import ReportTable from "../NewReport/ReportTable/reportTable";
@@ -6,7 +6,7 @@ import { Button } from "@mui/material";
 import NotesInfo from "../../Bills/NewBill/NotesInfo/notes";
 
 const EditReport = () => {
-    const {register,control,handleSubmit,formState,setValue,watch,getValues,unregister} = useForm<reportData>({
+    const {register,control,handleSubmit,formState,setValue} = useForm<reportData>({
     })
     
     const {errors} = formState

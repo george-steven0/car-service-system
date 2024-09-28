@@ -12,13 +12,13 @@ export type ModalType = {
     open : boolean,
     close : ()=>void,
     t:TFunction,
-    lang?:string
+    lang?:string | null | undefined
 }
 
 type FormData = {
     name: string;
-    types : {
-        carType : string
+    brands : {
+        name : string
     }[],
 }
 
@@ -27,7 +27,7 @@ const AddCarModal = ({open,close,t,lang}:ModalType) => {
     const form = useForm<FormData>({
         defaultValues : {
             name:'',
-            types : [{carType:''}]
+            brands : [{name:''}]
         }
     })
     const {register,handleSubmit,formState,reset,control} = form
@@ -36,12 +36,12 @@ const AddCarModal = ({open,close,t,lang}:ModalType) => {
 
     const {fields,append,remove} = useFieldArray({
         control,
-        name : "types" // this name must be same as the one in the FormData Type carType
+        name : "brands" // this name must be same as the one in the FormData Type carType
     })
 
     const addCarType = ()=>{
         append([{
-            carType : ''
+            name: ''
         }])
     }
 
@@ -116,7 +116,7 @@ const AddCarModal = ({open,close,t,lang}:ModalType) => {
                                         <label>{t('common.brand')}:</label>
                                         {index === 0 ? null : <Button onClick={()=>removeCarType(index)} className="text-danger bg-danger bg-opacity-25 flex justify-between items-center gap-x-1 p-1 mb-2 capitalize"><RiDeleteBack2Line /> {t('common.delete')}</Button>}
                                     </div>
-                                    <input type="text" {...register(`types.${index}.carType`,{
+                                    <input type="text" {...register(`brands.${index}.name`,{
                                         required:{
                                             value:true,
                                             message : t('common.required')

@@ -2,7 +2,6 @@ import { Control, Controller, FieldErrors, UseFormReturn} from "react-hook-form"
 import { BillFormData, partsData } from "../../../../Components/Types/types";
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "../../../../Components/Redux/TsHooks";
 
 function getPartName(index: number): keyof BillFormData {
     return `parts.${index}` as never;
@@ -19,7 +18,7 @@ type PartsFormProps = {
     remove : (e:number)=>void,
     isPrint? : boolean
 }
-const PartsInfo:React.FC<PartsFormProps> = ({register,errors,control,setValue,watch,parts,add,remove,isPrint}) => {
+const PartsInfo:React.FC<PartsFormProps> = ({register,control,setValue,watch,parts,add,remove,isPrint}) => {
     const {t} = useTranslation()
 
     const top100Films = [
